@@ -1,0 +1,13 @@
+{
+  "name": "flagbit/module-factfinder",
+  "description": "FACT-Finder integration module for Magento 2",
+  "type": "magento2-module",
+  "extra": {
+    "map": [
+      [
+        "*",
+        "Flagbit/FactFinder"
+      ]
+    ]
+  }
+}
