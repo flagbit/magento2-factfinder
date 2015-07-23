@@ -5,24 +5,15 @@
  */
 namespace Flagbit\FACTFinder\Adapter;
 
-use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder as AggregationBuilder;
-use Magento\Framework\App\Resource;
-use Magento\Framework\DB\Select;
 use Magento\Framework\Search\AdapterInterface;
 use Magento\Framework\Search\RequestInterface;
+use Magento\Framework\Search\Adapter\Mysql\ResponseFactory;
 
 /**
  * MySQL Search Adapter
  */
 class Adapter implements AdapterInterface
 {
-    /**
-     * Mapper instance
-     *
-     * @var Mapper
-     */
-    protected $mapper;
-
     /**
      * Response Factory
      *
@@ -31,31 +22,12 @@ class Adapter implements AdapterInterface
     protected $responseFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
-     */
-    private $resource;
-
-    /**
-     * @var AggregationBuilder
-     */
-    private $aggregationBuilder;
-
-    /**
-     * @param Mapper $mapper
      * @param ResponseFactory $responseFactory
-     * @param Resource $resource
-     * @param AggregationBuilder $aggregationBuilder
      */
     public function __construct(
-        Mapper $mapper,
-        ResponseFactory $responseFactory,
-        Resource $resource,
-        AggregationBuilder $aggregationBuilder
+        ResponseFactory $responseFactory
     ) {
-        $this->mapper = $mapper;
         $this->responseFactory = $responseFactory;
-        $this->resource = $resource;
-        $this->aggregationBuilder = $aggregationBuilder;
     }
 
     /**
@@ -63,26 +35,21 @@ class Adapter implements AdapterInterface
      */
     public function query(RequestInterface $request)
     {
-        /** @var Select $query */
-        $query = $this->mapper->buildQuery($request);
-        $documents = $this->executeQuery($query);
-
-        $aggregations = $this->aggregationBuilder->build($request, $documents);
         $response = [
-            'documents' => $documents,
-            'aggregations' => $aggregations,
+            'documents' => [
+                40 => [
+                    'entity_id' => 40,
+                    'relevance' => 200
+                ],
+                44 => [
+                    'entity_id' => 44,
+                    'relevance' => 200
+                ]
+            ],
+            'aggregations' => [
+                'category_bucket' => []
+            ],
         ];
         return $this->responseFactory->create($response);
-    }
-
-    /**
-     * Executes query and return raw response
-     *
-     * @param Select $select
-     * @return array
-     */
-    private function executeQuery(Select $select)
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->fetchAssoc($select);
     }
 }

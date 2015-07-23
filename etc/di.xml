@@ -10,7 +10,7 @@
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
             <argument name="adapters" xsi:type="array">
-                <item name="factfinder" xsi:type="string">Flagbit\FACTFinder\Adapter\Adapter.php</item>
+                <item name="factfinder" xsi:type="string">Flagbit\FACTFinder\Adapter\Adapter</item>
             </argument>
         </arguments>
     </type>
