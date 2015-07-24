@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <factfinder>
+            <search>
+                <address>example.com</address>
+                <port>80</port>
+                <protocol>http</protocol>
+                <!-- possible values: http, https -->
+
+                <auth_type>advanced</auth_type>
+                <auth_advancedPrefix>FACT-FINDER</auth_advancedPrefix>
+                <auth_advancedPostfix>FACT-FINDER</auth_advancedPostfix>
+
+                <!-- encoding settings -->
+                <encoding>
+                    <pageContent>UTF-8</pageContent>
+                    <serverURI>UTF-8</serverURI>
+                    <pageURI>UTF-8</pageURI>
+                </encoding>
+            </search>
+        </factfinder>
+    </default>
+</config>
