@@ -12,12 +12,58 @@
             <label>FACT-Finder</label>
             <tab>catalog</tab>
             <resource>Flagbit_FACTFinder::config_factfinder</resource>
-            <group id="seo" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Search Engine Optimization</label>
-                <field id="search_terms1" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Popular Search Terms1</label>
-                    <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
+            <group id="search" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>FACT-Finder Base Configuration</label>
+
+                <field id="address" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Server URL</label>
                 </field>
+
+                <field id="port" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Server Port</label>
+                </field>
+
+                <field id="protocol" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Protocol</label>
+                    <source_model>Flagbit\FACTFinder\Model\Config\Source\Protocol</source_model>
+                </field>
+
+                <field id="context" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Context Name</label>
+                </field>
+
+                <field id="username" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>User Name for Authentication</label>
+                </field>
+
+                <field id="password" translate="label" type="password" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Password</label>
+                </field>
+
+                <field id="channel" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Primary Channel</label>
+                    <comment>FACT-Finder can provide multiple search indexes, each represented by a "channel". Enter the channel that will be filled with your Magento export. Leave empty to use the default channel.</comment>
+                </field>
+
+                <field id="language" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Language</label>
+                    <comment>Some text strings come directly from FACT-Finder. Enter the language code here. Leave empty to use the language specified by the user's browser.</comment>
+                </field>
+
+                <field id="auth_type" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Authentication Type</label>
+                    <source_model>Flagbit\FACTFinder\Model\Config\Source\AuthType</source_model>
+                </field>
+
+                <field id="auth_advancedPrefix" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Advanced Authentication Prefix</label>
+                    <comment>The advanced authentication post- and prefix are only used when the authentication type is "advanced".</comment>
+                </field>
+
+                <field id="auth_advancedPostfix" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Advanced Authentication Postfix</label>
+                </field>
+
             </group>
         </section>
     </system>
