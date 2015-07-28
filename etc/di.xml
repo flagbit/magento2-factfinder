@@ -21,4 +21,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Flagbit\FACTFinder\Model\Export\Adapter\Csv">
+        <arguments>
+            <argument name="destination" xsi:type="string">factfinder/products.csv</argument>
+        </arguments>
+    </type>
 </config>
