@@ -16,6 +16,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Catalog\Model\Resource\Category;
 use Magento\Catalog\Model\Resource\Product\Attribute;
+use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class Product
 {
@@ -39,7 +40,14 @@ class Product
      */
     protected $_categoryColFactory;
 
+    protected $_scopeConfig;
+
     protected $_attributeColFactory;
+
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
+    protected $_configurable;
 
     /**
      * @var array
@@ -87,19 +95,25 @@ class Product
      * @param \Magento\Framework\Api\FilterBuilder                                $filterBuilder
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory          $categoryColFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+     * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable        $configurable
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface                  $scopeConfig
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
         Category\CollectionFactory $categoryColFactory,
-        Attribute\CollectionFactory $attributeColFactory
+        Attribute\CollectionFactory $attributeColFactory,
+        Configurable $configurable,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_products = $productRepository;
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->_filterBuilder = $filterBuilder;
         $this->_categoryColFactory = $categoryColFactory;
         $this->_attributeColFactory = $attributeColFactory;
+        $this->_configurable = $configurable;
+        $this->_scopeConfig = $scopeConfig;
     }
 
 
@@ -126,25 +140,48 @@ class Product
         $result = [];
         /** @var \Magento\Catalog\Model\Product $product */
         foreach ($products as $product) {
-            $row = [
-                'id'                    => $product->getEntityId(),
-                'parent_id'             => $product->getEntityId(), //this might be sku as well, needs to me configured
-                'sku'                   => $product->getSku(),
-                'category'              => $this->_getCategoryPath($product),
-                'filterable_attributes' => $this->_getFilterableAttributeValues($product),
-                'searchable_attributes' => $this->_getSearchableAttributeValues($product),
-                'numerical_attributes'  => $this->_getNumericalAttributeValues($product),
-                'name'                  => $product->getName(),
-                'description'           => $product->getDescription(),
-                'short_description'     => $product->getShortDescription(),
-                'price'                 => $product->getPrice(),
-            ];
-            // todo: additional attributes
-
-            $result[] = $this->_formatRowValues($row);
+            $result[] = $this->_buildExportRow($product);
+            $product->getMediaGalleryImages();
+            foreach ($this->_getChildrenProducts($product) as $child) {
+                $child->setParentId($product->getEntityId());
+                $result[] = $this->_buildExportRow($child);
+            }
         }
 
+            // todo: additional attributes
+
         return $result;
+    }
+
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @return array|\Magento\Catalog\Api\Data\ProductInterface[]
+     */
+    protected function _getChildrenProducts($product)
+    {
+        $childrenIds = [];
+        foreach ($this->_configurable->getChildrenIds($product->getEntityId()) as $group) {
+            $childrenIds = array_merge($childrenIds, $group);
+        }
+
+        if (empty($childrenIds)) {
+            return [];
+        }
+
+        $childrenFilter = $this->_filterBuilder
+            ->setField('entity_id')
+            ->setValue($childrenIds)
+            ->setConditionType('in')
+            ->create();
+        $childrenSearchCriteria = $this->_searchCriteriaBuilder->addFilters([$childrenFilter])
+            ->create();
+
+        $children = $this->_products->getList($childrenSearchCriteria)
+            ->getItems();
+
+        return $children;
     }
 
 
@@ -309,9 +346,14 @@ class Product
         /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
         foreach ($collection as $category) {
             $structure = preg_split('#/+#', $category->getPath());
+            // remove root and default categories
+            $structure = array_slice($structure, 2);
             $path = [];
             foreach ($structure as $pathId) {
-                $path[] = $collection->getItemById($pathId)->getName();
+                $name = $collection->getItemById($pathId)->getName();
+                $name = urlencode($name);
+                $name = str_replace('+', '%20', $name);
+                $path[] = $name;
             }
 
             $this->_categoryPaths[$category->getId()] = implode('/', $path);
@@ -465,6 +507,30 @@ class Product
         }
 
         return $this;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @return array
+     */
+    protected function _buildExportRow($product)
+    {
+        $row = [
+            'id'                    => $product->getEntityId(),
+            'parent_id'             => $product->getParentId() ? $product->getParentId() : $product->getEntityId(),
+            'sku'                   => $product->getSku(),
+            'category'              => $this->_getCategoryPath($product),
+            'filterable_attributes' => $this->_getFilterableAttributeValues($product),
+            'searchable_attributes' => $this->_getSearchableAttributeValues($product),
+            'numerical_attributes'  => $this->_getNumericalAttributeValues($product),
+            'name'                  => $product->getName(),
+            'description'           => $product->getDescription(),
+            'short_description'     => $product->getShortDescription(),
+            'price'                 => $product->getPrice(),
+        ];
+
+        return $this->_formatRowValues($row);
     }
 
 
