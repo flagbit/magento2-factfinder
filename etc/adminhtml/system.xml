@@ -32,11 +32,11 @@
                     <label>Context Name</label>
                 </field>
 
-                <field id="username" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="auth_user" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>User Name for Authentication</label>
                 </field>
 
-                <field id="password" translate="label" type="password" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="auth_password" translate="label" type="password" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password</label>
                 </field>
 
