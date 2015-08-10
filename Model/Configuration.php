@@ -12,6 +12,7 @@ class Configuration implements ConfigurationInterface
 	const DEFAULT_SEMAPHORE_TIMEOUT = 7200; // 60 seconds = 2 hours
 
     private $config;
+    private $storeConfig;
     private $authType;
 	private $secondaryChannels;
     private $storeId = null;
@@ -19,14 +20,17 @@ class Configuration implements ConfigurationInterface
     // Should the search adapters retrieve only product ids? (otherwise, full records will be requested)
     private $idsOnly = true;
 
-    public function __construct($config = null)
+    /**
+     * @param \Magento\Framework\Object $configWrapper
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     */
+    public function __construct(
+        \Magento\Framework\Object $configWrapper,
+        \Magento\Framework\App\Config\ScopeConfigInterface $storeConfig
+    )
     {
-    	$this->config = new Varien_Object($config);
-    	if(is_array($config)){
-    		$this->config->setData($config);
-    	} else {
-			$this->config->setData(Mage::getStoreConfig(self::XML_CONFIG_PATH));
-		}
+    	$this->config = $configWrapper->addData($storeConfig->getValue('factfinder/search'));
+        $this->storeConfig = $storeConfig;
     }
 
     public function __sleep() {
@@ -78,7 +82,7 @@ class Configuration implements ConfigurationInterface
     {
         if(!$this->config->hasData($name)){
             try{
-                $this->config->setData($name,  Mage::getStoreConfig(self::XML_CONFIG_PATH.'/'.$name, $this->storeId));
+                $this->config->setData($name,  $this->storeConfig->getValue(self::XML_CONFIG_PATH.'/'.$name));
             }catch (Exception $e){
                 $this->config->setData($name, null);
             }
