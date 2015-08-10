@@ -16,7 +16,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Catalog\Model\Resource\Category;
 use Magento\Catalog\Model\Resource\Product\Attribute;
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 class Product
 {
@@ -122,20 +122,7 @@ class Product
      */
     public function export()
     {
-        $filters = [];
-
-        $filters[] = $this->_filterBuilder
-            ->setField(\Magento\Catalog\Model\Product::VISIBILITY)
-            ->setValue(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-            ->setConditionType('eq')
-            ->create()
-        ;
-
-        $searchCriteria = $this->_searchCriteriaBuilder->addFilters($filters)
-            ->create();
-
-        $products = $this->_products->getList($searchCriteria)
-            ->getItems();
+        $products = $this->_getProductList();
 
         $result = [];
         /** @var \Magento\Catalog\Model\Product $product */
@@ -531,6 +518,31 @@ class Product
         ];
 
         return $this->_formatRowValues($row);
+    }
+
+
+    /**
+     * Get list of products for export
+     *
+     * @return \Magento\Catalog\Api\Data\ProductInterface[]
+     */
+    protected function _getProductList()
+    {
+        $filters = [];
+
+        $filters[] = $this->_filterBuilder
+            ->setField(\Magento\Catalog\Model\Product::VISIBILITY)
+            ->setValue(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+            ->setConditionType('eq')
+            ->create();
+
+        $searchCriteria = $this->_searchCriteriaBuilder->addFilters($filters)
+            ->create();
+
+        $products = $this->_products->getList($searchCriteria)
+            ->getItems();
+
+        return $products;
     }
 
 
