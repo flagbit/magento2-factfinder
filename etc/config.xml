@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Magento/Store/etc/config.xsd">
     <default>
         <factfinder>
             <search>
@@ -25,6 +25,12 @@
                     <pageURI>UTF-8</pageURI>
                 </encoding>
             </search>
+            <export>
+                <images_and_deeplinks>1</images_and_deeplinks>
+                <image_type>image</image_type>
+                <remove_tags>1</remove_tags>
+                <image_size>0</image_size>
+            </export>
         </factfinder>
     </default>
 </config>

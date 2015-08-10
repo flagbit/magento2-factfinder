@@ -45,7 +45,7 @@
                     <comment>FACT-Finder can provide multiple search indexes, each represented by a "channel". Enter the channel that will be filled with your Magento export. Leave empty to use the default channel.</comment>
                 </field>
 
-                <field id="language" translate="label" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="language" translate="label,comment" type="text" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Language</label>
                     <comment>Some text strings come directly from FACT-Finder. Enter the language code here. Leave empty to use the language specified by the user's browser.</comment>
                 </field>
@@ -62,6 +62,30 @@
 
                 <field id="auth_advancedPostfix" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Advanced Authentication Postfix</label>
+                </field>
+
+            </group>
+            <group id="export" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>FACT-Finder Export Configuration</label>
+
+                <field id="images_deeplinks" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Export Images and Deeplinks</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="image_type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Type of images to export</label>
+                    <source_model>Flagbit\FACTFinder\Model\Config\Source\Image</source_model>
+                </field>
+
+                <field id="image_size" translate="label,comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Size of images to export</label>
+                    <comment>Please enter the desired edge length of the Suggest images in pixels. If you do not want them to be resized, enter 0.</comment>
+                </field>
+
+                <field id="remove_tags" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Remove HTML entities and tags</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
 
             </group>

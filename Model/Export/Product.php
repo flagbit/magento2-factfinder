@@ -17,6 +17,8 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Catalog\Model\Resource\Category;
 use Magento\Catalog\Model\Resource\Product\Attribute;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Flagbit\FACTFinder\Helper\Config;
+use Magento\Catalog\Helper;
 
 class Product
 {
@@ -54,6 +56,11 @@ class Product
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
      */
     protected $_configurable;
+
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $_imageHelper;
 
     /**
      * @var array
@@ -117,7 +124,8 @@ class Product
      * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory          $categoryColFactory
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable        $configurable
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface                  $scopeConfig
+     * @param \Flagbit\FACTFinder\Helper\Config                                   $config
+     * @param \Magento\Catalog\Helper\Image                                       $imageHelper
      */
     public function __construct(
         ProductRepositoryInterface $productRepository,
@@ -126,7 +134,8 @@ class Product
         Category\CollectionFactory $categoryColFactory,
         Attribute\CollectionFactory $attributeColFactory,
         Configurable $configurable,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        Config $config,
+        Helper\Image $imageHelper
     ) {
         $this->_products = $productRepository;
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -134,7 +143,8 @@ class Product
         $this->_categoryColFactory = $categoryColFactory;
         $this->_attributeColFactory = $attributeColFactory;
         $this->_configurable = $configurable;
-        $this->_scopeConfig = $scopeConfig;
+        $this->_config = $config;
+        $this->_imageHelper = $imageHelper;
     }
 
 
@@ -215,12 +225,18 @@ class Product
      */
     public function getHeader()
     {
-        return array_merge(
+        $columns = array_merge(
             $this->_defaultFields,
             $this->_attributeFields,
             $this->_requiredAttributes,
             $this->_getAdditionalAttributeCodes()
         );
+
+        if ($this->_config->exportImagesAndDeeplinks()) {
+            $columns = array_merge($columns, ['image', 'deeplink']);
+        }
+
+        return $columns;
     }
 
 
@@ -540,6 +556,11 @@ class Product
             'price'                 => $product->getPrice(),
         ];
 
+        if ($this->_config->exportImagesAndDeeplinks() && !$product->getParentId()) {
+            $row['image'] = $this->getProductImage($product);
+            $row['deeplink'] = $this->getProductDeeplink($product);
+        }
+
         return $this->_formatRowValues($row);
     }
 
@@ -566,6 +587,40 @@ class Product
             ->getItems();
 
         return $products;
+    }
+
+
+    /**
+     * Get product image url
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @return string
+     */
+    public function getProductImage($product)
+    {
+        $type = $this->_config->getExportImageType();
+
+        $image = $this->_imageHelper->init($product, $type);
+
+        if ($this->_config->getExportImageSize() > 0) {
+            $image->resize($this->_config->getExportImageSize());
+        }
+
+        return (string) $image;
+    }
+
+
+    /**
+     * Get product deeplink (direct link to product page)
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     *
+     * @return string
+     */
+    public function getProductDeeplink($product)
+    {
+        return $product->getProductUrl();
     }
 
 

@@ -28,7 +28,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected $_configurable;
 
-    protected $_scopeConfig;
+    protected $_config;
 
     protected function setUp()
     {
@@ -79,9 +79,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_scopeConfig = $this->getMock(
-            '\Magento\Framework\App\Config\ScopeConfigInterface',
-            [],
+        $this->_config = $this->getMock(
+            '\Flagbit\FACTFinder\Helper\Config',
+            ['exportImagesAndDeeplinks'],
             [],
             '',
             false
@@ -102,13 +102,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->_categoryColFactory,
             $this->_attributeColFactory,
             $this->_configurable,
-            $this->_scopeConfig
+            $this->_config
         );
 
     }
 
     public function testGetHeader()
     {
+        $this->_config->expects($this->once())
+            ->method('exportImagesAndDeeplinks');
+
         $header = $this->_product->getHeader();
 
         $this->assertNotEmpty($header);
