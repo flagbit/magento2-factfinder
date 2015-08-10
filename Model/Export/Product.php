@@ -40,8 +40,14 @@ class Product
      */
     protected $_categoryColFactory;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
+    /**
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     */
     protected $_attributeColFactory;
 
     /**
@@ -59,6 +65,9 @@ class Product
         'category',
     ];
 
+    /**
+     * @var array
+     */
     protected $_requiredAttributes = [
         'name',
         'description',
@@ -80,12 +89,24 @@ class Product
      */
     protected $_categoryPaths;
 
+    /**
+     * @var array
+     */
     protected $_filterableAttributes = [];
 
+    /**
+     * @var array
+     */
     protected $_searchableAttributes = [];
 
+    /**
+     * @var array
+     */
     protected $_numericalAttributes = [];
 
+    /**
+     * @var
+     */
     protected $_attributeOptionLabels;
 
 
@@ -135,7 +156,7 @@ class Product
             }
         }
 
-            // todo: additional attributes
+        // todo: additional attributes
 
         return $result;
     }
@@ -287,9 +308,10 @@ class Product
 
         $paths = [];
         /** @var \Magento\Catalog\Model\Category $category */
-        foreach ($product->getCategoryCollection() as $category) {
-            if (isset($this->_categoryPaths[$category->getId()])) {
-                $paths[] = $this->_categoryPaths[$category->getId()];
+
+        foreach ($product->getCategoryIds() as $categoryId) {
+            if (isset($this->_categoryPaths[$categoryId])) {
+                $paths[] = $this->_categoryPaths[$categoryId];
             }
         }
 
@@ -333,7 +355,7 @@ class Product
         /* @var $collection \Magento\Catalog\Model\Resource\Category\Collection */
         foreach ($collection as $category) {
             $structure = preg_split('#/+#', $category->getPath());
-            // remove root and default categories
+            // remove root and "default" categories
             $structure = array_slice($structure, 2);
             $path = [];
             foreach ($structure as $pathId) {
@@ -495,6 +517,7 @@ class Product
 
         return $this;
     }
+
 
     /**
      * @param \Magento\Catalog\Model\Product $product
