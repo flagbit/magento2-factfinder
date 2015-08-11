@@ -14,66 +14,37 @@ namespace Flagbit\FACTFinder\Test\Unit\Model\Export;
 
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    protected $_product;
+    protected $_export;
 
-    protected $_productRepository;
+    protected $_productResource;
 
-    protected $_searchCriteriaBuilder;
+    protected $_categoryResource;
 
-    protected $_filterBuilder;
-
-    protected $_categoryColFactory;
-
-    protected $_attributeColFactory;
-
-    protected $_configurable;
+    protected $_attributeResource;
 
     protected $_config;
 
     protected function setUp()
     {
-        $this->_productRepository = $this->getMock(
-            '\Magento\Catalog\Api\ProductRepositoryInterface',
+        $this->_productResource = $this->getMock(
+            '\Flagbit\FACTFinder\Model\Export\Resource\Product',
+            ['getProductList', 'getChildrenProducts'],
             [],
-            [],
-            ''
+            '',
+            false
         );
 
-        $this->_searchCriteriaBuilder = $this->getMock(
-            '\Magento\Framework\Api\SearchCriteriaBuilder',
+        $this->_categoryResource = $this->getMock(
+            '\Flagbit\FACTFinder\Model\Export\Resource\Category',
             [],
             [],
             '',
             false
         );
 
-        $this->_filterBuilder = $this->getMock(
-            '\Magento\Framework\Api\FilterBuilder',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->_categoryColFactory = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Category\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->_attributeColFactory = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
-            [],
-            [],
-            '',
-            false
-        );
-
-        $this->_configurable = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\Product\Type\Configurable',
-            [],
+        $this->_attributeResource = $this->getMock(
+            '\Flagbit\FACTFinder\Model\Export\Resource\Attribute',
+            null,
             [],
             '',
             false
@@ -87,21 +58,18 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_product = $this->getMock(
+        $this->_export = $this->getMock(
             '\Flagbit\FACTFinder\Model\Export\Product',
-            null,
+            ['_buildExportRow'],
             [],
             '',
             false
         );
 
-        $this->_product->__construct(
-            $this->_productRepository,
-            $this->_searchCriteriaBuilder,
-            $this->_filterBuilder,
-            $this->_categoryColFactory,
-            $this->_attributeColFactory,
-            $this->_configurable,
+        $this->_export->__construct(
+            $this->_productResource,
+            $this->_categoryResource,
+            $this->_attributeResource,
             $this->_config
         );
 
@@ -112,35 +80,64 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_config->expects($this->once())
             ->method('exportImagesAndDeeplinks');
 
-        $header = $this->_product->getHeader();
+        $header = $this->_export->getHeader();
 
         $this->assertNotEmpty($header);
         $this->assertInternalType('array', $header);
     }
 
+
     public function testNothingToExport()
     {
+        $this->_productResource->expects($this->once())
+            ->method('getProductList')
+            ->willReturn([]);
+
+        $this->_export->expects($this->never())
+            ->method('_buildExportRow');
+        $this->_productResource->expects($this->never())
+            ->method('getChildrenProducts');
+
+        $result = $this->_export->export();
+
+        $this->assertEquals([], $result);
+    }
+
+
+    public function testExport()
+    {
+        $products = $this->_getProductList();
+
+        $this->_productResource->expects($this->once())
+            ->method('getProductList')
+            ->willReturn($products);
+
+        $this->_productResource->expects($this->atLeastOnce())
+            ->method('getChildrenProducts')
+            ->willReturn([]);
+
+        $this->_export->expects($this->atLeastOnce())
+            ->method('_buildExportRow')
+            ->willReturn('test string');
+
+        $result = $this->_export->export();
+
+        $this->assertNotEmpty($result);
+        $this->assertInternalType('array', $result);
+    }
+
+
+    protected function _getProductList()
+    {
         $product = $this->getMock(
-            '\Flagbit\FACTFinder\Model\Export\Product',
-            [
-                '_getProductList',
-                '_buildExportRow',
-            ],
+            'Magento\Catalog\Model\Product',
+            [],
             [],
             '',
             false
         );
 
-        $product->expects($this->once())
-            ->method('_getProductList')
-            ->willReturn([]);
-
-        $product->expects($this->never())->method('_buildExportRow');
-        $product->expects($this->never())->method('_getChildrenProducts');
-
-        $result = $product->export();
-
-        $this->assertEquals([], $result);
+        return [$product, $product];
     }
 
 }
