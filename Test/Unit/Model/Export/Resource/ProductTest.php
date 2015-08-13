@@ -229,71 +229,54 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Catalog\Api\Data\ProductInterface', array_pop($result));
     }
 
-    public function testGetBaseProductImage()
+    /**
+     * @dataProvider initializeImageTypeDataProvider
+     */
+    public function testGetBaseProductImage($type)
     {
         $product = $this->_getProductMock();
 
         $this->_config
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getExportImageType')
-            ->will($this->onConsecutiveCalls('image', 'small_image', 'thumbnail'));
+            ->willReturn($type);
 
         $this->_imageHelper
-            ->expects($this->exactly(3))
+            ->expects($this->once())
             ->method('init')
-            ->withConsecutive(
-                [$product, 'image'],
-                [$product, 'small_image'],
-                [$product, 'thumbnail']
-            )
+            ->with($product, $type)
             ->will($this->returnSelf());
-
-        $result = $this->_resource->getProductImage($product);
-        $this->assertInternalType('string', $result);
-
-        $result = $this->_resource->getProductImage($product);
-        $this->assertInternalType('string', $result);
 
         $result = $this->_resource->getProductImage($product);
         $this->assertInternalType('string', $result);
     }
 
-    public function testGetProductImageResizeEnabled()
+    /**
+     * @dataProvider initializeImageResizeDataProvider
+     */
+    public function testGetProductImageResize($size)
     {
         $this->_config
             ->expects($this->any())
             ->method('getExportImageSize')
-            ->willReturn(50);
+            ->willReturn($size);
 
         $this->_imageHelper
             ->expects($this->once())
             ->method('init')
             ->will($this->returnSelf());
 
-        $this->_imageHelper
-            ->expects($this->once())
-            ->method('resize')
-            ->with(50)
-            ->will($this->returnSelf());
-
-        $this->_resource->getProductImage($this->_getProductMock());
-    }
-
-    public function testGetProductImageResizeDisabled()
-    {
-        $this->_config
-            ->expects($this->any())
-            ->method('getExportImageSize')
-            ->willReturn(0);
-
-        $this->_imageHelper
-            ->expects($this->once())
-            ->method('init')
-            ->will($this->returnSelf());
-
-        $this->_imageHelper
-            ->expects($this->never())
-            ->method('resize');
+        if (intval($size) > 0) {
+            $this->_imageHelper
+                ->expects($this->once())
+                ->method('resize')
+                ->with($size)
+                ->will($this->returnSelf());
+        } else {
+            $this->_imageHelper
+                ->expects($this->never())
+                ->method('resize');
+        }
 
         $this->_resource->getProductImage($this->_getProductMock());
     }
@@ -316,6 +299,26 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->willReturn(123);
 
         return $product;
+    }
+
+    public function initializeImageTypeDataProvider()
+    {
+        return [
+            ['image'],
+            ['small_image'],
+            ['thumbnail'],
+        ];
+    }
+
+    public function initializeImageResizeDataProvider()
+    {
+        return [
+            [0],
+            [50],
+            [-25],
+            ['ololo'],
+            ['40'],
+        ];
     }
 
 }
