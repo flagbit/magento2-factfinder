@@ -21,17 +21,17 @@ class Attribute
     /**
      * @var array
      */
-    protected $_searchableAttributes;
+    protected $_searchableAttributes = [];
 
     /**
      * @var array
      */
-    protected $_filterableAttributes;
+    protected $_filterableAttributes = [];
 
     /**
      * @var array
      */
-    protected $_numericalAttributes;
+    protected $_numericalAttributes = [];
 
     /**
      * @var array
