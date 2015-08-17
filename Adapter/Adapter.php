@@ -21,28 +21,19 @@ class Adapter implements AdapterInterface
      *
      * @var \Flagbit\FACTFinder\Model\Facade
      */
-    protected $_facade;
-
-    /**
-     * Query factory
-     *
-     * @var \Magento\Search\Model\QueryFactory
-     */
-    protected $_queryFactory;
+    protected $_searchAdapter;
 
     /**
      * @param \Magento\Framework\Search\Adapter\Mysql\ResponseFactory $responseFactory
      * @param \Flagbit\FACTFinder\Model\Facade $facade
-     * @param \Magento\Search\Model\QueryFactory $queryFactory
      */
     public function __construct(
         \Magento\Framework\Search\Adapter\Mysql\ResponseFactory $responseFactory,
-        \Flagbit\FACTFinder\Model\Facade $facade,
-        \Magento\Search\Model\QueryFactory $queryFactory
+        \Flagbit\FACTFinder\Model\Handler\Search $searchAdapter
     ) {
         $this->_responseFactory = $responseFactory;
-        $this->_facade = $facade;
-        $this->_queryFactory = $queryFactory;
+        $this->_searchAdapter = $searchAdapter;
+
     }
 
     /**
@@ -50,14 +41,9 @@ class Adapter implements AdapterInterface
      */
     public function query(RequestInterface $request)
     {
-        $this->_facade->configureSearchAdapter([
-            'query' => $this->_queryFactory->get()->getQueryText(),
-            'idsOnly' => 'true'
-        ]);
-
         $response = [
             'documents' => $this->_transformSearchResult(
-                $this->_facade->getSearchResult()
+                $this->_searchAdapter->getSearchResult()
             ),
             'aggregations' => [
                 'category_bucket' => []
