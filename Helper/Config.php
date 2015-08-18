@@ -29,10 +29,12 @@ class Config
         $this->_scopeConfig = $scopeConfig;
     }
 
-
+    /**
+     * @return bool
+     */
     public function isEngineEnabled()
     {
-        return (bool) $this->_scopeConfig->getValue('catalog/search/engine') == 'factfinder';
+        return $this->_scopeConfig->getValue('catalog/search/engine') == 'factfinder';
     }
 
     /**
@@ -43,7 +45,6 @@ class Config
         return (bool) $this->_scopeConfig->getValue('factfinder/export/images_deeplinks');
     }
 
-
     /**
      * @return bool
      */
@@ -51,7 +52,6 @@ class Config
     {
         return (bool) $this->_scopeConfig->getValue('factfinder/export/remove_tags');
     }
-
 
     /**
      * @return string
@@ -65,7 +65,6 @@ class Config
     {
         return intval($this->_scopeConfig->getValue('factfinder/export/image_size'));
     }
-
 
     /**
      * @param string $path

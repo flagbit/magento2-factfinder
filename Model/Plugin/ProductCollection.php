@@ -31,8 +31,12 @@ class ProductCollection
      *
      * @return int
      */
-    public function afterGetSize()
+    public function afterGetSize(\Magento\CatalogSearch\Model\Resource\Fulltext\Collection $subject, $result)
     {
+        if(!$this->_configHelper->isEngineEnabled()) {
+            return $result;
+        }
+
         return $this->_searchHandler->getSearchResult()->getFoundRecordsCount();
     }
 
@@ -43,6 +47,10 @@ class ProductCollection
      */
     public function before_loadEntities(\Magento\Eav\Model\Entity\Collection\AbstractCollection $subject)
     {
+        if(!$this->_configHelper->isEngineEnabled()) {
+            return;
+        }
+
         $subject->setPageSize(false);
     }
 }
