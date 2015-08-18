@@ -21,7 +21,6 @@ class Config
      */
     protected $_scopeConfig;
 
-
     /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
@@ -30,6 +29,11 @@ class Config
         $this->_scopeConfig = $scopeConfig;
     }
 
+
+    public function isEngineEnabled()
+    {
+        return (bool) $this->_scopeConfig->getValue('catalog/search/engine') == 'factfinder';
+    }
 
     /**
      * @return bool
