@@ -218,6 +218,33 @@ class Facade
     }
 
     /**
+     * Configure suggest adapter
+     *
+     * @param array  $params
+     * @param string $channel
+     * @param int    $id
+     *
+     * @return void
+     */
+    public function configureSuggestAdapter($params, $channel = null, $id = null)
+    {
+        $this->_configureAdapter($params, "suggest", $channel, $id);
+    }
+
+    /**
+     * Get suggestions object from adapter
+     *
+     * @param string $channel
+     * @param int    $id
+     *
+     * @return \FACTFinder\Data\SuggestQuery[]
+     */
+    public function getSuggestions($channel = null, $id = null)
+    {
+        return $this->_getFactFinderObject("suggest", "getSuggestions", $channel, $id);
+    }
+
+    /**
      * Configure adapter
      *
      * @param array  $params
