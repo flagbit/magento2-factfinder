@@ -33,6 +33,7 @@ class Facade
     /**
      * @param \Flagbit\FACTFinder\Model\Logger $logger
      * @param \Flagbit\FACTFinder\Model\Configuration $configuration
+     * @param \FACTFinder\Util\Pimple $dic
      */
     public function __construct(
         \Flagbit\FACTFinder\Model\Logger $logger,
