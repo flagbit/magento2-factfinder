@@ -32,4 +32,7 @@
     <type name="Magento\Search\Model\Autocomplete">
         <plugin name="factfinder" type="Flagbit\FACTFinder\Model\Autocomplete\Plugin" />
     </type>
+    <type name="Magento\Framework\RequireJs\Config\File\Collector\Aggregated">
+        <plugin name="factfinder" type="Flagbit\FACTFinder\Model\RequireJs\Collector\Plugin" />
+    </type>
 </config>
