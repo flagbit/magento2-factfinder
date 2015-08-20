@@ -25,7 +25,7 @@ class Export extends \Magento\Framework\App\Action\Action
         $password = md5($this->_scopeConfig->getValue(self::XML_AUTH_PASSWORD_PATH));
 
         if ($password == '' || $password != $this->getRequest()->getParam('key')) {
-            //$this->getActionFlag()->set('', self::FLAG_NO_DISPATCH, true);
+            $this->getActionFlag()->set('', self::FLAG_NO_DISPATCH, true);
         }
     }
 }
