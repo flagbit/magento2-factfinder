@@ -56,8 +56,11 @@ class DataProvider implements DataProviderInterface
         }
 
         foreach ($suggestions as $suggestion) {
+            $attributes = $suggestion->getAttributes();
             $result[] = $this->_itemFactory->create([
-                'title'       => $suggestion->getLabel(),
+                'title' => $suggestion->getLabel(),
+                'image' => $suggestion->getImageUrl(),
+                'link'  => isset($attributes['deeplink']) ? $attributes['deeplink'] : '',
             ]);
         }
 
