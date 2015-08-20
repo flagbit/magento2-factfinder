@@ -1,9 +1,4 @@
 <?php
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
-
 namespace Flagbit\FACTFinder\Test\Unit\Helper;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
