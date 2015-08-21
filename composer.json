@@ -1,6 +1,10 @@
 {
   "name": "flagbit/module-factfinder",
   "description": "FACT-Finder integration module for Magento 2",
+  "require": {
+    "php": "~5.5.0|~5.6.0",
+    "fact-finder/fact-finder-php-library": "1.1.2"
+  },
   "type": "magento2-module",
   "extra": {
     "map": [
@@ -9,5 +13,12 @@
         "Flagbit/FACTFinder"
       ]
     ]
-  }
+  },
+  "authors": [
+    {
+      "name": "Flagbit GmbH & Co. KG",
+      "homepage": "http://www.flagbit.de/",
+      "role": "Developer"
+    }
+  ]
 }
