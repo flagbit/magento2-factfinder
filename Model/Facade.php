@@ -45,6 +45,7 @@ class Facade
         $this->_configuration = $configuration;
         $this->_dic = $dic;
 
+        FF::disableCustomClasses();
         $this->_prepareDic();
     }
 
