@@ -24,6 +24,7 @@
                     <serverURI>UTF-8</serverURI>
                     <pageURI>UTF-8</pageURI>
                 </encoding>
+                <fallback_engine>mysql</fallback_engine>
             </search>
             <export>
                 <images_and_deeplinks>1</images_and_deeplinks>
