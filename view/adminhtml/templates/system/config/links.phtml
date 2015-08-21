@@ -10,7 +10,7 @@
 ?>
 <td class="value">
     <?php foreach ($this->getLinks() as $id => $link): ?>
-        <button id="export-<?php echo $id; ?>" data-mage-init='{"exportLink":[]}' data-action="<?php echo $link['url'] ?>">
+        <button type="button" id="export-<?php echo $id; ?>" onclick="window.location='<?php echo $link['url'] ?>'">
             <?php echo __($link['label']) ?>
         </button>
     <?php endforeach; ?>
