@@ -1,0 +1,17 @@
+<?php
+/**
+ * @category Mage
+ * @package magento2
+ * @author Flagbit Magento Team <magento@flagbit.de>
+ * @copyright Copyright (c) 2015 Flagbit GmbH & Co. KG
+ * @license GPL
+ * @link http://www.flagbit.de
+ */
+?>
+<td class="value">
+    <?php foreach ($this->getLinks() as $id => $link): ?>
+        <button id="export-<?php echo $id; ?>" data-mage-init='{"exportLink":[]}' data-action="<?php echo $link['url'] ?>">
+            <?php echo __($link['label']) ?>
+        </button>
+    <?php endforeach; ?>
+</td>

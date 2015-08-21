@@ -76,4 +76,16 @@ class Config
         return $this->_scopeConfig->getValue($path);
     }
 
+
+    /**
+     * Get md5 hash of the password
+     *
+     * @return string
+     */
+    public function getPasswordMd5()
+    {
+        return md5($this->getValue('factfinder/search/auth_password'));
+    }
+
+
 }

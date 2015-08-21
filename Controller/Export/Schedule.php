@@ -36,5 +36,10 @@ class Schedule extends \Flagbit\FACTFinder\Controller\Export
             ->setScheduledAt($this->_timezone->scopeTimeStamp() + 60)
             ->setStatus(\Magento\Cron\Model\Schedule::STATUS_PENDING)
             ->save();
+
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+
+        return $resultRedirect->setRefererOrBaseUrl();
     }
 }
