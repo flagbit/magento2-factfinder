@@ -6,6 +6,9 @@
     "fact-finder/fact-finder-php-library": "1.2.1"
   },
   "type": "magento2-module",
+  "autoload": {
+    "files": ["registration.php"]
+  },
   "authors": [
     {
       "name": "Flagbit GmbH & Co. KG",
