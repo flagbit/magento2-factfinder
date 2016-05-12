@@ -6,14 +6,6 @@
     "fact-finder/fact-finder-php-library": "1.1.2"
   },
   "type": "magento2-module",
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Flagbit/FACTFinder"
-      ]
-    ]
-  },
   "authors": [
     {
       "name": "Flagbit GmbH & Co. KG",

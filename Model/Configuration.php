@@ -25,7 +25,7 @@ class Configuration implements ConfigurationInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\Framework\Object $configWrapper,
+        \Magento\Framework\DataObject $configWrapper,
         \Magento\Framework\App\Config\ScopeConfigInterface $storeConfig
     )
     {
