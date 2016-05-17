@@ -353,4 +353,14 @@ class Configuration implements ConfigurationInterface
     public function getIdsOnly() {
         return $this->idsOnly;
     }
+
+    public function getWhitelistClientParameters()
+    {
+        return array();
+    }
+
+    public function getWhitelistServerParameters()
+    {
+        return array();
+    }
 }

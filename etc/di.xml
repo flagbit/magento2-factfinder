@@ -29,7 +29,7 @@
     <type name="Magento\Framework\App\Config\DataInterface">
         <plugin name="factfinder" type="Flagbit\FACTFinder\Model\Plugin\DataInterface" />
     </type>
-    <type name="Magento\CatalogSearch\Model\Resource\Fulltext\Collection">
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
         <plugin name="factfinder" type="Flagbit\FACTFinder\Model\Plugin\ProductCollection" />
     </type>
     <type name="Magento\Search\Model\Autocomplete">
