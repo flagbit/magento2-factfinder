@@ -22,7 +22,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->_collection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Category\CollectionFactory',
+            '\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory',
             [],
             [],
             '',

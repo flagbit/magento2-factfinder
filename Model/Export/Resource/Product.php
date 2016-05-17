@@ -164,7 +164,7 @@ class Product
             $image->resize($this->_config->getExportImageSize());
         }
 
-        return (string) $image;
+        return $image->getUrl();
     }
 
 

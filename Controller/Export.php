@@ -28,4 +28,9 @@ class Export extends \Magento\Framework\App\Action\Action
             $this->getActionFlag()->set('', self::FLAG_NO_DISPATCH, true);
         }
     }
+
+    public function execute()
+    {
+
+    }
 }

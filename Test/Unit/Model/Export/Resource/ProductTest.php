@@ -60,6 +60,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->_imageHelper
+            ->method('getUrl')
+            ->will($this->returnValue('http://ololo.com/media/image.png'));
+
         $this->_config = $this->getMock(
             '\Flagbit\FACTFinder\Helper\Config',
             [],
