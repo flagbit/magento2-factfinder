@@ -13,15 +13,16 @@
 namespace Flagbit\FACTFinder\Test\Unit\Model\Export\Resource;
 
 
-use Magento\Authorization\Model\Resource\Rules\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
-
+    /**
+     * @var \Flagbit\FACTFinder\Model\Export\Resource\Attribute
+     */
     protected $_resource;
 
-    protected $_collection;
+    protected $_collectionFactory;
 
     /**
      * @var ObjectManagerHelper
@@ -30,8 +31,8 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_collection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory',
+        $this->_collectionFactory = $this->getMock(
+            '\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             [],
             [],
             '',
@@ -39,7 +40,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resource = $this->getMock(
-            'Flagbit\FACTFinder\Model\Export\Resource\Attribute',
+            '\Flagbit\FACTFinder\Model\Export\Resource\Attribute',
             null,
             [],
             '',
@@ -47,7 +48,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_resource->__construct(
-            $this->_collection
+            $this->_collectionFactory
         );
 
         $this->_objectManagerHelper = new ObjectManagerHelper($this);
@@ -139,11 +140,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     protected function prepareEmptyCollection()
     {
         $collection = $this->_objectManagerHelper->getCollectionMock(
-            '\Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
             []
         );
 
-        $this->_collection
+        $this->_collectionFactory
             ->expects($this->once())
             ->method('create')
             ->willReturn($collection);
@@ -187,12 +188,12 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $data[] = $attribute;
         }
 
-        $this->_collection
+        $this->_collectionFactory
             ->expects($this->any())
             ->method('create')
             ->will($this->returnCallback(function () use ($data) {
                 return $this->_objectManagerHelper->getCollectionMock(
-                    '\Magento\Catalog\Model\Resource\Product\Attribute\Collection',
+                    '\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection',
                     $data
                 );
             }));
@@ -219,7 +220,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $options = $objectManagerHelper->getCollectionMock(
-            '\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection',
+            '\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection',
             [$optionMock, $optionMock]
         );
 

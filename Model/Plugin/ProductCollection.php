@@ -31,7 +31,7 @@ class ProductCollection
      *
      * @return int
      */
-    public function afterGetSize(\Magento\CatalogSearch\Model\Resource\Fulltext\Collection $subject, $result)
+    public function afterGetSize(\Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $subject, $result)
     {
         if(!$this->_configHelper->isEngineEnabled()) {
             return $result;

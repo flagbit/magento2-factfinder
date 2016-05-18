@@ -61,10 +61,11 @@ class Adapter implements AdapterInterface
     protected function _transformSearchResult(\FACTFinder\Data\Result $searchResult)
     {
         $result = [];
+        /** @var \FACTFinder\Data\Record $record */
         foreach($searchResult as $record) {
             $result[$record->getID()] = [
-                'entity_id' => $record->getID(),
-                'relevance' => $record->getSimilarity()
+                'entity_id' => $record->getField('parent_id'),
+                'score' => $record->getSimilarity(),
             ];
         }
 

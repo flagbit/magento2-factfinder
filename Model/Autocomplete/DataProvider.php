@@ -13,7 +13,6 @@
 namespace Flagbit\FACTFinder\Model\Autocomplete;
 
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
-use Magento\Search\Model\Autocomplete\ItemFactory;
 
 class DataProvider implements DataProviderInterface
 {

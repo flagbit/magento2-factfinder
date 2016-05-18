@@ -104,7 +104,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $collectionData = [];
         foreach ($data as $collectionItem) {
-            $collectionData[] = new \Magento\Framework\Object($collectionItem);
+            $collectionData[] = new \Magento\Framework\DataObject($collectionItem);
         }
 
         return $collectionData;

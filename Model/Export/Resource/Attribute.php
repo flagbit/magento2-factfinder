@@ -14,9 +14,9 @@ namespace Flagbit\FACTFinder\Model\Export\Resource;
 class Attribute
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
-    protected $_collection;
+    protected $_collectionFactory;
 
     /**
      * @var array
@@ -47,12 +47,12 @@ class Attribute
 
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collection
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
     ) {
-        $this->_collection = $collection;
+        $this->_collectionFactory = $collectionFactory;
     }
 
 
@@ -64,7 +64,7 @@ class Attribute
     public function getSearchableAttributes()
     {
         if (empty($this->_searchableAttributes)) {
-            $collection = $this->_collection->create();
+            $collection = $this->_collectionFactory->create();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             foreach ($collection as $attribute) {
                 if ($attribute->getIsSearchable()
@@ -109,7 +109,7 @@ class Attribute
     public function getFilterableAttributes()
     {
         if (empty($this->_filterableAttributes)) {
-            $collection = $this->_collection->create();
+            $collection = $this->_collectionFactory->create();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             foreach ($collection as $attribute) {
                 if ($attribute->getIsFilterable()
@@ -133,7 +133,7 @@ class Attribute
     public function getNumericalAttributes()
     {
         if (empty($this->_numericalAttributes)) {
-            $collection = $this->_collection->create();
+            $collection = $this->_collectionFactory->create();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
             foreach ($collection as $attribute) {
                 if ($attribute->getBackendType() == 'decimal'

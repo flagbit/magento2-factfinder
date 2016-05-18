@@ -66,7 +66,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             'documents' => [
                 1 => [
                     'entity_id' => 1,
-                    'relevance' => '0.99',
+                    'score' => '0.99',
                 ],
             ],
             'aggregations' => [
@@ -92,6 +92,12 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         $resultRecord
             ->expects($this->any())
             ->method('getID')
+            ->willReturn('1');
+
+        $resultRecord
+            ->expects($this->any())
+            ->method('getField')
+            ->with('parent_id')
             ->willReturn('1');
 
         $resultRecord

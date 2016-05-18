@@ -9,12 +9,12 @@ class Configuration implements ConfigurationInterface
     const SIMPLE_AUTH   = 'simple';
     const ADVANCED_AUTH = 'advanced';
     const XML_CONFIG_PATH = 'factfinder/search';
-	const DEFAULT_SEMAPHORE_TIMEOUT = 7200; // 60 seconds = 2 hours
+    const DEFAULT_SEMAPHORE_TIMEOUT = 7200; // 60 seconds = 2 hours
 
     private $config;
     private $storeConfig;
     private $authType;
-	private $secondaryChannels;
+    private $secondaryChannels;
     private $storeId = null;
 
     // Should the search adapters retrieve only product ids? (otherwise, full records will be requested)
@@ -25,37 +25,37 @@ class Configuration implements ConfigurationInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      */
     public function __construct(
-        \Magento\Framework\Object $configWrapper,
+        \Magento\Framework\DataObject $configWrapper,
         \Magento\Framework\App\Config\ScopeConfigInterface $storeConfig
     )
     {
-    	$this->config = $configWrapper->addData($storeConfig->getValue('factfinder/search'));
+        $this->config = $configWrapper->addData($storeConfig->getValue('factfinder/search'));
         $this->storeConfig = $storeConfig;
     }
 
     public function __sleep() {
 
-    	foreach(get_class_methods($this) as $method){
-    		if(substr($method, 0, 3) != 'get'
-    			|| $method == 'getCustomValue'){
-    			continue;
-    		}
-    		call_user_func(array(&$this, $method));
-    	}
-    	return array('config');
+        foreach(get_class_methods($this) as $method){
+            if(substr($method, 0, 3) != 'get'
+                || $method == 'getCustomValue'){
+                continue;
+            }
+            call_user_func(array(&$this, $method));
+        }
+        return array('config');
     }
 
-	/**
-	 * @return array of strings
-	 **/
-	public function getSecondaryChannels() {
-		if($this->secondaryChannels == null)
-		{
-			// array_filter() is used to remove empty channel names
-			$this->secondaryChannels = array_filter(explode(';', $this->getCustomValue('secondary_channels')));
-		}
-		return $this->secondaryChannels;
-	}
+    /**
+     * @return array of strings
+     **/
+    public function getSecondaryChannels() {
+        if($this->secondaryChannels == null)
+        {
+            // array_filter() is used to remove empty channel names
+            $this->secondaryChannels = array_filter(explode(';', $this->getCustomValue('secondary_channels')));
+        }
+        return $this->secondaryChannels;
+    }
 
     /**
      * Allows to catch configuration for certain store id.
@@ -339,7 +339,7 @@ class Configuration implements ConfigurationInterface
      * Sets the idsOnly flag, which determines whether product ids or full records should be requested by the search adapters.
      * Request only products ids if true, full records otherwise
      *
-     * @param	bool	value
+     * @param    bool    value
      **/
     public function setIdsOnly($value) {
         $this->idsOnly = $value;
@@ -352,5 +352,15 @@ class Configuration implements ConfigurationInterface
      **/
     public function getIdsOnly() {
         return $this->idsOnly;
+    }
+
+    public function getWhitelistClientParameters()
+    {
+        return array();
+    }
+
+    public function getWhitelistServerParameters()
+    {
+        return array();
     }
 }

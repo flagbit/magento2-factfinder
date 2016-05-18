@@ -15,7 +15,7 @@ namespace Flagbit\FACTFinder\Model\Export\Resource;
 class Category
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $_collection;
 
@@ -25,10 +25,10 @@ class Category
     protected $_categoryPaths;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Category\CollectionFactory $colFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $colFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Category\CollectionFactory $colFactory
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $colFactory
     ) {
         $this->_collection = $colFactory;
     }

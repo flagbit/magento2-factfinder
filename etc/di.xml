@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+        xsi:noNamespaceSchemaLocation="../../../magento/framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
             <argument name="adapters" xsi:type="array">
@@ -29,7 +29,7 @@
     <type name="Magento\Framework\App\Config\DataInterface">
         <plugin name="factfinder" type="Flagbit\FACTFinder\Model\Plugin\DataInterface" />
     </type>
-    <type name="Magento\CatalogSearch\Model\Resource\Fulltext\Collection">
+    <type name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
         <plugin name="factfinder" type="Flagbit\FACTFinder\Model\Plugin\ProductCollection" />
     </type>
     <type name="Magento\Search\Model\Autocomplete">

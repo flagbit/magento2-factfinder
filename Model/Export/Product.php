@@ -24,7 +24,7 @@ class Product
     protected $_productResource;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $_categoryResource;
 
