@@ -2,22 +2,22 @@
 namespace Flagbit\FACTFinder\Model;
 
 use FACTFinder\Loader as FF;
-use FACTFinder\Core\IConvEncodingConverter;
+use FACTFinder\Util\Pimple;
 
 class Facade
 {
     /**
-     * @var \FACTFinder\Util\Pimple
+     * @var Pimple
      */
     protected $_dic;
 
     /**
-     * @var \Flagbit\FACTFinder\Model\Logger
+     * @var Logger
      */
     protected $_logger;
 
     /**
-     * @var \Flagbit\FACTFinder\Model\Configuration
+     * @var Configuration
      */
     protected $_configuration;
 
@@ -31,14 +31,19 @@ class Facade
     protected $_adapters = array();
 
     /**
-     * @param \Flagbit\FACTFinder\Model\Logger $logger
-     * @param \Flagbit\FACTFinder\Model\Configuration $configuration
-     * @param \FACTFinder\Util\Pimple $dic
+     * @var array
+     */
+    protected $_paramHashes = array();
+
+    /**
+     * @param Logger $logger
+     * @param Configuration $configuration
+     * @param Pimple $dic
      */
     public function __construct(
-        \Flagbit\FACTFinder\Model\Logger $logger,
-        \Flagbit\FACTFinder\Model\Configuration $configuration,
-        \FACTFinder\Util\Pimple $dic
+        Logger $logger,
+        Configuration $configuration,
+        Pimple $dic
     )
     {
         $this->_logger = $logger;

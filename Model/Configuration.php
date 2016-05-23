@@ -21,8 +21,8 @@ class Configuration implements ConfigurationInterface
     private $idsOnly = true;
 
     /**
-     * @param \Magento\Framework\Object $configWrapper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\DataObject                          $configWrapper
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $storeConfig
      */
     public function __construct(
         \Magento\Framework\DataObject $configWrapper,
@@ -33,8 +33,8 @@ class Configuration implements ConfigurationInterface
         $this->storeConfig = $storeConfig;
     }
 
-    public function __sleep() {
-
+    public function __sleep()
+    {
         foreach(get_class_methods($this) as $method){
             if(substr($method, 0, 3) != 'get'
                 || $method == 'getCustomValue'){
@@ -44,18 +44,22 @@ class Configuration implements ConfigurationInterface
                 $this->$method();
             }
         }
+
         return array('config');
     }
+
 
     /**
      * @return array of strings
      **/
-    public function getSecondaryChannels() {
+    public function getSecondaryChannels()
+    {
         if($this->secondaryChannels == null)
         {
             // array_filter() is used to remove empty channel names
             $this->secondaryChannels = array_filter(explode(';', $this->getCustomValue('secondary_channels')));
         }
+
         return $this->secondaryChannels;
     }
 
@@ -66,7 +70,8 @@ class Configuration implements ConfigurationInterface
      * @param int $storeId
      * @return FACTFinderCustom_Configuration
      */
-    public function setStoreId($storeId) {
+    public function setStoreId($storeId)
+    {
         if ($this->storeId != $storeId) {
             $this->config = new Varien_Object();
         }
@@ -95,14 +100,16 @@ class Configuration implements ConfigurationInterface
     /**
      * @return boolean
      */
-    public function isDebugEnabled() {
+    public function isDebugEnabled()
+    {
         return $this->getCustomValue('debug') == 'true';
     }
 
     /**
      * @return string
      */
-    public function getRequestProtocol() {
+    public function getRequestProtocol()
+    {
         $protocol = $this->getCustomValue('protocol');
         // legacy code because of wrong spelling
         if (!$protocol) {
@@ -114,39 +121,45 @@ class Configuration implements ConfigurationInterface
     /**
      * @return string
      */
-    public function getServerAddress() {
+    public function getServerAddress()
+    {
         return $this->getCustomValue('address');
     }
 
     /**
      * @return int
      */
-    public function getServerPort() {
+    public function getServerPort()
+    {
         return $this->getCustomValue('port');
     }
 
     /**
      * @return string
      */
-    public function getContext() {
+    public function getContext()
+    {
         return $this->getCustomValue('context');
     }
 
     /**
      * @return string
      */
-    public function getChannel() {
+    public function getChannel()
+    {
         return $this->getCustomValue('channel');
     }
 
     /**
      * @return string
      */
-    public function getLanguage() {
+    public function getLanguage()
+    {
         return $this->getCustomValue('language');
     }
 
-    public function getAuthType() {
+    public function getAuthType()
+    {
         if ($this->authType == null) {
             $this->authType = $this->getCustomValue('auth_type');
             if ( $this->authType != self::HTTP_AUTH
@@ -161,21 +174,24 @@ class Configuration implements ConfigurationInterface
     /**
      * @return boolean
      */
-    public function isHttpAuthenticationType() {
+    public function isHttpAuthenticationType()
+    {
         return $this->getAuthType() == self::HTTP_AUTH;
     }
 
     /**
      * @return boolean
      */
-    public function isSimpleAuthenticationType() {
+    public function isSimpleAuthenticationType()
+    {
         return $this->getAuthType() == self::SIMPLE_AUTH;
     }
 
     /**
      * @return boolean
      */
-    public function isAdvancedAuthenticationType() {
+    public function isAdvancedAuthenticationType()
+    {
         return $this->getAuthType() == self::ADVANCED_AUTH;
     }
 
@@ -212,7 +228,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return array
      */
-    public function getServerMappings() {
+    public function getServerMappings()
+    {
         return array();
     }
 
@@ -258,8 +275,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return string
      **/
-
-    public function getDefaultConnectTimeout() {
+    public function getDefaultConnectTimeout()
+    {
         return 2;
     }
 
@@ -268,8 +285,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return string
      **/
-
-    public function getDefaultTimeout() {
+    public function getDefaultTimeout()
+    {
         return 4;
     }
 
@@ -278,8 +295,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return string
      **/
-
-    public function getSuggestConnectTimeout() {
+    public function getSuggestConnectTimeout()
+    {
         return 1;
     }
 
@@ -288,8 +305,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return string
      **/
-
-    public function getSuggestTimeout() {
+    public function getSuggestTimeout()
+    {
         return 2;
     }
 
@@ -297,6 +314,7 @@ class Configuration implements ConfigurationInterface
     {
         return 2;
     }
+
 
     public function getTrackingTimeout()
     {
@@ -308,8 +326,8 @@ class Configuration implements ConfigurationInterface
      *
      * @return string
      **/
-
-    public function getImportConnectTimeout() {
+    public function getImportConnectTimeout()
+    {
         return 10;
     }
 
@@ -318,32 +336,40 @@ class Configuration implements ConfigurationInterface
      *
      * @return string
      **/
-
-    public function getImportTimeout() {
+    public function getImportTimeout()
+    {
         return 360;
     }
+
 
     /**
      * {@inheritdoc}
      *
      * @return string
      */
-    public function getPageContentEncoding() {
+    public function getPageContentEncoding()
+    {
         return $this->getCustomValue('encoding/pageContent');
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
     public function getClientUrlEncoding()
     {
         return $this->getCustomValue('encoding/pageURI');
     }
 
+
     /**
      * Sets the idsOnly flag, which determines whether product ids or full records should be requested by the search adapters.
      * Request only products ids if true, full records otherwise
      *
-     * @param    bool    value
+     * @param bool $value
      **/
-    public function setIdsOnly($value) {
+    public function setIdsOnly($value)
+    {
         $this->idsOnly = $value;
     }
 
@@ -352,17 +378,28 @@ class Configuration implements ConfigurationInterface
      *
      * @return bool
      **/
-    public function getIdsOnly() {
+    public function getIdsOnly()
+    {
         return $this->idsOnly;
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
     public function getWhitelistClientParameters()
     {
         return array();
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
     public function getWhitelistServerParameters()
     {
         return array();
     }
+
+
 }

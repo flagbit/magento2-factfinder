@@ -26,7 +26,7 @@ class Cron
 
 
     /**
-     * @param \Flagbit\FACTFinder\Model\Export\Product $products
+     * @param \Flagbit\FACTFinder\Model\Export\Product     $products
      * @param \Flagbit\FACTFinder\Model\Export\Adapter\Csv $csv
      */
     public function __construct(
