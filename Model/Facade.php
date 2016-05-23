@@ -151,7 +151,7 @@ class Facade
         try {
             $adapter = $this->_getAdapter($type, $channel, $id);
             $data = $adapter->$objectGetter();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->_logger->error($e);
         }
 

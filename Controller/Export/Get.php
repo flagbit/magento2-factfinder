@@ -28,7 +28,7 @@ class Get extends \Flagbit\FACTFinder\Controller\Export
         $fileName = '/factfinder/products.csv';
         $filePath = $this->_filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
 
-        if (!file_exists($filePath->getAbsolutePath() . $fileName)) {
+        if (!is_file($filePath->getAbsolutePath() . $fileName)) {
             /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
             $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
             $resultRaw->setContents('No export file was generated yet. Please trigger an export through magento\'s backend.');

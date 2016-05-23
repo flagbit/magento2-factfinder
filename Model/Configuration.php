@@ -40,7 +40,9 @@ class Configuration implements ConfigurationInterface
                 || $method == 'getCustomValue'){
                 continue;
             }
-            call_user_func(array(&$this, $method));
+            if (method_exists($this, $method)) {
+                $this->$method();
+            }
         }
         return array('config');
     }
@@ -75,7 +77,7 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
-     * @param string name
+     * @param string $name
      * @return string value
      */
     public function getCustomValue($name)
@@ -83,7 +85,7 @@ class Configuration implements ConfigurationInterface
         if(!$this->config->hasData($name)){
             try{
                 $this->config->setData($name,  $this->storeConfig->getValue(self::XML_CONFIG_PATH.'/'.$name));
-            }catch (Exception $e){
+            } catch (\Exception $e){
                 $this->config->setData($name, null);
             }
         }
@@ -257,7 +259,7 @@ class Configuration implements ConfigurationInterface
      * @return string
      **/
 
-    function getDefaultConnectTimeout() {
+    public function getDefaultConnectTimeout() {
         return 2;
     }
 
@@ -267,7 +269,7 @@ class Configuration implements ConfigurationInterface
      * @return string
      **/
 
-    function getDefaultTimeout() {
+    public function getDefaultTimeout() {
         return 4;
     }
 
@@ -277,7 +279,7 @@ class Configuration implements ConfigurationInterface
      * @return string
      **/
 
-    function getSuggestConnectTimeout() {
+    public function getSuggestConnectTimeout() {
         return 1;
     }
 
@@ -287,7 +289,7 @@ class Configuration implements ConfigurationInterface
      * @return string
      **/
 
-    function getSuggestTimeout() {
+    public function getSuggestTimeout() {
         return 2;
     }
 
@@ -307,7 +309,7 @@ class Configuration implements ConfigurationInterface
      * @return string
      **/
 
-    function getImportConnectTimeout() {
+    public function getImportConnectTimeout() {
         return 10;
     }
 
@@ -317,7 +319,7 @@ class Configuration implements ConfigurationInterface
      * @return string
      **/
 
-    function getImportTimeout() {
+    public function getImportTimeout() {
         return 360;
     }
 

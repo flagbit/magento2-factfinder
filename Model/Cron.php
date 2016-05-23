@@ -11,7 +11,6 @@
  */
 
 namespace Flagbit\FACTFinder\Model;
-require_once __DIR__ . '/../../../../app/autoload.php';
 
 class Cron
 {
