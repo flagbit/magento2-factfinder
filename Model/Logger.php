@@ -1,17 +1,20 @@
 <?php
 namespace Flagbit\FACTFinder\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
+
 class Logger implements \FACTFinder\Util\LoggerInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected static $_logger;
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger)
     {
         self::$_logger = $logger;
     }
@@ -26,12 +29,12 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      *                     loggers need to be qualified with periods instead of
      *                     backslashes.
      *
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
     public static function getLogger($name)
     {
         if (self::$_logger === null) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $objectManager = ObjectManager::getInstance();
             self::$_logger = $objectManager->get('\Psr\Log\LoggerInterface');
         }
 
@@ -42,8 +45,9 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      * Log message with prefix TRACE
      *
      * @param mixed $message
+     * @param array $context
      *
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function trace($message, array $context = array())
     {
@@ -55,8 +59,9 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      * Log message with prefix TRACE
      *
      * @param mixed $message
+     * @param array $context
      *
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function debug($message, array $context = array())
     {
@@ -68,8 +73,9 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      * Log message with prefix INFO
      *
      * @param mixed $message
+     * @param array $context
      *
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function info($message, array $context = array())
     {
@@ -81,8 +87,9 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      * Log message with prefix WARNING
      *
      * @param mixed $message
+     * @param array $context
      *
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function warn($message, array $context = array())
     {
@@ -94,8 +101,9 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      * Log message with prefix ERROR
      *
      * @param mixed $message
+     * @param array $context
      *
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function error($message, array $context = array())
     {
@@ -107,8 +115,9 @@ class Logger implements \FACTFinder\Util\LoggerInterface
      * Log message with prefix FATAL ERROR
      *
      * @param mixed $message
+     * @param array $context
      *
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function fatal($message, array $context = array())
     {

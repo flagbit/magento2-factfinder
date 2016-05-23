@@ -11,21 +11,23 @@
  */
 namespace Flagbit\FACTFinder\Model\RequireJs\Collector;
 
+use Flagbit\FACTFinder\Helper\Config;
+use Magento\Framework\RequireJs\Config\File\Collector\Aggregated;
+
 class Plugin
 {
 
     /**
-     * @var \Flagbit\FACTFinder\Helper\Config
+     * @var Config
      */
     protected $_configHelper;
 
 
     /**
-     * @param \Flagbit\FACTFinder\Helper\Config $configHelper
+     * @param Config $configHelper
      */
-    public function __construct(
-        \Flagbit\FACTFinder\Helper\Config $configHelper
-    ) {
+    public function __construct(Config $configHelper)
+    {
         $this->_configHelper = $configHelper;
     }
 
@@ -33,13 +35,13 @@ class Plugin
     /**
      * We need a way to disable our js in case the module isn't enabled
      * As there's no way to pass a condition to requirejs thing, here we just remove our file(s) from the merge list
-     * 
-     * @param \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $subject
+     *
+     * @param Aggregated $subject
      * @param \Magento\Framework\View\File[]                                $result
      *
      * @return array
      */
-    public function afterGetFiles(\Magento\Framework\RequireJs\Config\File\Collector\Aggregated $subject, $result)
+    public function afterGetFiles(Aggregated $subject, $result)
     {
         if ($this->_configHelper->isEngineEnabled()) {
             return $result;

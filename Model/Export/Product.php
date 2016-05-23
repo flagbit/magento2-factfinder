@@ -147,7 +147,8 @@ class Product
         $value = preg_replace('/</u', ' <', $value);
         $value = preg_replace("#\s+#siu", ' ', trim(strip_tags($value)));
 
-        $value = addslashes($value);
+        // add slashes
+        $value = preg_replace('/([\'"\\\]{1})/', '\\\$1', $value);
 
         // remove html entities
         $value = preg_replace("/&(?:[a-z\d]|#\d|#x[a-f\d]){2,8};/i", '', $value);

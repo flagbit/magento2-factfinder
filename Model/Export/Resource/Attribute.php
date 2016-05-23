@@ -14,24 +14,29 @@ namespace Flagbit\FACTFinder\Model\Export\Resource;
 class Attribute
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\Product\Attribute\Repository
      */
-    protected $_collectionFactory;
+    protected $_attributeRepository;
 
     /**
-     * @var array
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $_searchableAttributes = [];
+    protected $_searchCriteriaBuilder;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected $_filterableAttributes = [];
+    protected $_searchableAttributes = null;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected $_numericalAttributes = [];
+    protected $_filterableAttributes = null;
+
+    /**
+     * @var array|null
+     */
+    protected $_numericalAttributes = null;
 
     /**
      * @var array
@@ -47,12 +52,15 @@ class Attribute
 
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\Repository $attributeRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder        $searchCriteriaBuilder
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
+        \Magento\Catalog\Model\Product\Attribute\Repository $attributeRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder        $searchCriteriaBuilder
     ) {
-        $this->_collectionFactory = $collectionFactory;
+        $this->_attributeRepository = $attributeRepository;
+        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
 
@@ -63,10 +71,11 @@ class Attribute
      */
     public function getSearchableAttributes()
     {
-        if (empty($this->_searchableAttributes)) {
-            $collection = $this->_collectionFactory->create();
+        if ($this->_searchableAttributes === null) {
+            $this->_searchableAttributes = [];
+            $searchCriteria = $this->_searchCriteriaBuilder->create();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            foreach ($collection as $attribute) {
+            foreach ($this->_attributeRepository->getList($searchCriteria)->getItems() as $attribute) {
                 if ($attribute->getIsSearchable()
                     && !in_array($attribute->getAttributeCode(), $this->_requiredAttributes)
                     && $attribute->getIsUserDefined()
@@ -108,10 +117,11 @@ class Attribute
      */
     public function getFilterableAttributes()
     {
-        if (empty($this->_filterableAttributes)) {
-            $collection = $this->_collectionFactory->create();
+        if ($this->_filterableAttributes === null) {
+            $this->_filterableAttributes = [];
+            $searchCriteria = $this->_searchCriteriaBuilder->create();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            foreach ($collection as $attribute) {
+            foreach ($this->_attributeRepository->getList($searchCriteria)->getItems() as $attribute) {
                 if ($attribute->getIsFilterable()
                     && !in_array($attribute->getAttributeCode(), $this->_requiredAttributes)
                     && !in_array($attribute->getAttributeCode(), array_keys($this->getSearchableAttributes()))
@@ -132,10 +142,11 @@ class Attribute
      */
     public function getNumericalAttributes()
     {
-        if (empty($this->_numericalAttributes)) {
-            $collection = $this->_collectionFactory->create();
+        if ($this->_numericalAttributes === null) {
+            $this->_numericalAttributes = [];
+            $searchCriteria = $this->_searchCriteriaBuilder->create();
             /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-            foreach ($collection as $attribute) {
+            foreach ($this->_attributeRepository->getList($searchCriteria)->getItems() as $attribute) {
                 if ($attribute->getBackendType() == 'decimal'
                     && $attribute->getIsFilterable()
                     && !in_array($attribute->getAttributeCode(), $this->_requiredAttributes)

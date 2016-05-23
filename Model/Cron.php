@@ -11,7 +11,6 @@
  */
 
 namespace Flagbit\FACTFinder\Model;
-require_once __DIR__ . '/../../../../app/autoload.php';
 
 class Cron
 {
@@ -27,7 +26,7 @@ class Cron
 
 
     /**
-     * @param \Flagbit\FACTFinder\Model\Export\Product $products
+     * @param \Flagbit\FACTFinder\Model\Export\Product     $products
      * @param \Flagbit\FACTFinder\Model\Export\Adapter\Csv $csv
      */
     public function __construct(
